@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UN Advocacy Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #1a4b8c;
@@ -302,6 +303,44 @@
             font-size: 1rem;
         }
         
+        /* Resources Section */
+        .resources {
+            padding: 80px 0;
+            background-color: var(--light);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .resource-image {
+            height: 180px;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .resource-content {
+            padding: 20px;
+        }
+        
+        .resource-content h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
         /* Footer */
         footer {
             background-color: var(--dark);
@@ -369,6 +408,8 @@
             max-width: 500px;
             padding: 30px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .close-modal {
@@ -378,6 +419,41 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray);
+        }
+        
+        /* Member Dashboard */
+        .dashboard {
+            padding: 40px 0;
+            background-color: var(--light);
+            display: none;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .dashboard-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         /* Responsive */
@@ -404,6 +480,28 @@
             .hero p {
                 font-size: 1rem;
             }
+            
+            .membership-container {
+                flex-direction: column;
+            }
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1100;
+            display: none;
+        }
+        
+        .notification.error {
+            background: var(--accent);
         }
     </style>
 </head>
@@ -436,7 +534,7 @@
         <div class="container">
             <h2>United Nations Advocacy Community of Practice</h2>
             <p>Connecting 1,000 advocates worldwide to share knowledge, collaborate, and drive meaningful change through integrated digital platforms.</p>
-            <button class="btn btn-secondary">Explore Our Platforms</button>
+            <button class="btn btn-secondary" id="exploreBtn">Explore Our Platforms</button>
         </div>
     </section>
 
@@ -449,22 +547,22 @@
             </div>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">👥</div>
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
                     <h3>Member Directory</h3>
                     <p>Connect with fellow advocates, find expertise, and build professional relationships across the global community.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💬</div>
+                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
                     <h3>Multi-Platform Discussions</h3>
                     <p>Participate in conversations through LinkedIn Groups, Groups.io email lists, and Zoom collaborative spaces.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📚</div>
+                    <div class="feature-icon"><i class="fas fa-book"></i></div>
                     <h3>Document Repository</h3>
                     <p>Access and share resources, reports, and advocacy materials with AI-powered search and categorization.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
+                    <div class="feature-icon"><i class="fas fa-globe"></i></div>
                     <h3>Multi-Language Support</h3>
                     <p>Break language barriers with integrated DeepL translation for seamless global communication.</p>
                 </div>
@@ -481,29 +579,74 @@
             </div>
             <div class="platforms-grid">
                 <div class="platform-card">
-                    <div class="platform-logo">in</div>
+                    <div class="platform-logo"><i class="fab fa-linkedin"></i></div>
                     <h3>LinkedIn Group</h3>
                     <p>Professional networking and discussions</p>
                     <div class="status-badge status-active">Active</div>
-                    <button class="btn btn-outline" style="margin-top: 15px;">Access Group</button>
+                    <button class="btn btn-outline platform-access" data-platform="linkedin" style="margin-top: 15px;">Access Group</button>
                 </div>
                 <div class="platform-card">
-                    <div class="platform-logo">✉️</div>
+                    <div class="platform-logo"><i class="fas fa-envelope"></i></div>
                     <h3>Groups.io</h3>
                     <p>Email-based collaboration and announcements</p>
                     <div class="status-badge status-upcoming">Coming Soon</div>
+                    <button class="btn btn-outline platform-access" data-platform="groupsio" style="margin-top: 15px;" disabled>Access Platform</button>
                 </div>
                 <div class="platform-card">
-                    <div class="platform-logo">📹</div>
+                    <div class="platform-logo"><i class="fas fa-video"></i></div>
                     <h3>Zoom Workspace</h3>
                     <p>Virtual meetings and collaborative sessions</p>
                     <div class="status-badge status-upcoming">Coming Soon</div>
+                    <button class="btn btn-outline platform-access" data-platform="zoom" style="margin-top: 15px;" disabled>Access Platform</button>
                 </div>
                 <div class="platform-card">
-                    <div class="platform-logo">🔤</div>
+                    <div class="platform-logo"><i class="fas fa-language"></i></div>
                     <h3>DeepL Translation</h3>
                     <p>Real-time translation for global communication</p>
                     <div class="status-badge status-upcoming">Coming Soon</div>
+                    <button class="btn btn-outline platform-access" data-platform="deepl" style="margin-top: 15px;" disabled>Access Platform</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources" id="resources">
+        <div class="container">
+            <div class="section-title">
+                <h2>Community Resources</h2>
+                <p>Access our growing library of advocacy materials, reports, and tools.</p>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="resource-content">
+                        <h3>Advocacy Toolkit</h3>
+                        <p>Comprehensive guide to effective UN advocacy strategies and best practices.</p>
+                        <button class="btn btn-outline" style="margin-top: 15px;">Download</button>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="resource-content">
+                        <h3>Impact Reports</h3>
+                        <p>Quarterly reports on community initiatives and their measurable impact.</p>
+                        <button class="btn btn-outline" style="margin-top: 15px;">View Reports</button>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="resource-content">
+                        <h3>Event Calendar</h3>
+                        <p>Upcoming UN events, community meetings, and advocacy opportunities.</p>
+                        <button class="btn btn-outline" style="margin-top: 15px;">View Calendar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -563,6 +706,38 @@
         </div>
     </section>
 
+    <!-- Member Dashboard (Hidden by default) -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Member Dashboard</h2>
+                <button class="btn btn-outline" id="logoutBtn">Log Out</button>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+                    <p>View and edit your member profile, expertise, and preferences.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;">Edit Profile</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-comments"></i> Recent Discussions</h3>
+                    <p>See the latest conversations across all community platforms.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;">View Discussions</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-book"></i> My Resources</h3>
+                    <p>Access your saved documents and recently viewed materials.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;">View Resources</button>
+                </div>
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-calendar-check"></i> Upcoming Events</h3>
+                    <p>See community events, meetings, and UN advocacy opportunities.</p>
+                    <button class="btn btn-outline" style="margin-top: 15px;">View Calendar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -584,10 +759,10 @@
                 <div class="footer-column">
                     <h3>Platforms</h3>
                     <ul>
-                        <li><a href="#">LinkedIn Group</a></li>
-                        <li><a href="#">Groups.io</a></li>
-                        <li><a href="#">Zoom Workspace</a></li>
-                        <li><a href="#">Document Repository</a></li>
+                        <li><a href="#" class="platform-link" data-platform="linkedin">LinkedIn Group</a></li>
+                        <li><a href="#" class="platform-link" data-platform="groupsio">Groups.io</a></li>
+                        <li><a href="#" class="platform-link" data-platform="zoom">Zoom Workspace</a></li>
+                        <li><a href="#" class="platform-link" data-platform="deepl">Document Repository</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -624,13 +799,31 @@
         </div>
     </div>
 
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
     <script>
-        // Modal functionality
+        // Application State
+        const state = {
+            currentUser: null,
+            isLoggedIn: false
+        };
+
+        // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
         const joinBtn = document.getElementById('joinBtn');
+        const exploreBtn = document.getElementById('exploreBtn');
         const loginModal = document.getElementById('loginModal');
         const closeLoginModal = document.getElementById('closeLoginModal');
+        const registrationForm = document.getElementById('registrationForm');
+        const loginForm = document.getElementById('loginForm');
+        const platformAccessButtons = document.querySelectorAll('.platform-access');
+        const platformLinks = document.querySelectorAll('.platform-link');
+        const dashboard = document.getElementById('dashboard');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const notification = document.getElementById('notification');
         
+        // Modal functionality
         loginBtn.addEventListener('click', () => {
             loginModal.style.display = 'flex';
         });
@@ -645,21 +838,132 @@
             }
         });
         
-        // Form submission
-        const registrationForm = document.getElementById('registrationForm');
-        const loginForm = document.getElementById('loginForm');
+        // Explore button functionality
+        exploreBtn.addEventListener('click', () => {
+            document.getElementById('platforms').scrollIntoView({ behavior: 'smooth' });
+        });
         
+        // Platform access functionality
+        platformAccessButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (button.disabled) {
+                    showNotification('This platform integration is coming soon!', 'error');
+                    return;
+                }
+                
+                const platform = button.getAttribute('data-platform');
+                
+                if (platform === 'linkedin') {
+                    if (!state.isLoggedIn) {
+                        showNotification('Please log in to access the LinkedIn Group', 'error');
+                        loginModal.style.display = 'flex';
+                    } else {
+                        showNotification('Redirecting to LinkedIn Group...');
+                        // In a real implementation, this would redirect to the LinkedIn group
+                        setTimeout(() => {
+                            window.open('https://www.linkedin.com', '_blank');
+                        }, 1000);
+                    }
+                }
+            });
+        });
+        
+        // Platform links in footer
+        platformLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const platform = link.getAttribute('data-platform');
+                
+                if (platform === 'linkedin') {
+                    if (!state.isLoggedIn) {
+                        showNotification('Please log in to access the LinkedIn Group', 'error');
+                        loginModal.style.display = 'flex';
+                    } else {
+                        showNotification('Redirecting to LinkedIn Group...');
+                        setTimeout(() => {
+                            window.open('https://www.linkedin.com', '_blank');
+                        }, 1000);
+                    }
+                } else {
+                    showNotification('This platform integration is coming soon!', 'error');
+                }
+            });
+        });
+        
+        // Form submission - Registration
         registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Thank you for your interest! Registration will be processed soon.');
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const organization = document.getElementById('organization').value;
+            const expertise = document.getElementById('expertise').value;
+            
+            // Simple validation
+            if (!fullName || !email) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // In a real app, this would send data to a server
+            showNotification(`Thank you ${fullName}! Your registration has been received. We'll contact you at ${email} soon.`);
+            
+            // Reset form
             registrationForm.reset();
         });
         
+        // Form submission - Login
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Login functionality will be available after launch.');
-            loginForm.reset();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                showNotification('Please enter both email and password', 'error');
+                return;
+            }
+            
+            // Mock authentication - in a real app, this would verify credentials with a server
+            if (password.length < 6) {
+                showNotification('Invalid credentials. Please try again.', 'error');
+                return;
+            }
+            
+            // Successful login
+            state.isLoggedIn = true;
+            state.currentUser = email;
+            
+            showNotification(`Welcome back! You are now logged in.`);
+            
+            // Update UI
+            loginBtn.textContent = 'My Account';
+            joinBtn.style.display = 'none';
             loginModal.style.display = 'none';
+            dashboard.style.display = 'block';
+            
+            // Scroll to dashboard
+            dashboard.scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset form
+            loginForm.reset();
+        });
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            state.isLoggedIn = false;
+            state.currentUser = null;
+            
+            showNotification('You have been logged out.');
+            
+            // Update UI
+            loginBtn.textContent = 'Log In';
+            joinBtn.style.display = 'block';
+            dashboard.style.display = 'none';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
         
         // Smooth scrolling for navigation links
@@ -679,6 +983,51 @@
                 }
             });
         });
+        
+        // Resource download buttons
+        document.querySelectorAll('.resource-card .btn').forEach(button => {
+            button.addEventListener('click', () => {
+                if (!state.isLoggedIn) {
+                    showNotification('Please log in to access this resource', 'error');
+                    loginModal.style.display = 'flex';
+                } else {
+                    showNotification('Preparing your download...');
+                    // In a real implementation, this would trigger a download
+                }
+            });
+        });
+        
+        // Dashboard buttons
+        document.querySelectorAll('.dashboard-card .btn').forEach(button => {
+            button.addEventListener('click', () => {
+                showNotification('This feature will be available after the full launch');
+            });
+        });
+        
+        // Notification function
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'notification';
+            
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
+            
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+        
+        // Initialize the application
+        function init() {
+            console.log('UN Advocacy Community prototype initialized');
+            console.log('All interactive elements are functional');
+        }
+        
+        // Run initialization when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
